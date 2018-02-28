@@ -1,1 +1,5 @@
 notes/
+*.log
+*.aux
+*.pdf
+
