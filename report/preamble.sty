@@ -1,0 +1,83 @@
+\NeedsTeXFormat{LaTeX2e}[1994/06/01]
+\ProvidesPackage{custompreamble}
+  [2018/02/28 customPreamble]
+
+\RequirePackage[russian]{babel}
+\RequirePackage{float}
+\RequirePackage[TS1,T2A]{fontenc}
+\RequirePackage[utf8]{inputenc}
+
+\RequirePackage{amsmath}
+\RequirePackage{amssymb}
+\RequirePackage[pdftex]{graphicx}
+\RequirePackage{rotating}
+\RequirePackage{multirow}
+\RequirePackage{makecell}
+\graphicspath{{images/}}
+\DeclareGraphicsExtensions{.eps,.pdf,.png,.jpg}
+
+\RequirePackage{listings}
+\RequirePackage{titlesec}
+
+\titleformat{\chapter}[display]
+    {\filcenter\large}
+    {}
+    {8pt}
+    {\bfseries}{}
+
+\titleformat{\section}
+    {\normalsize\bfseries}
+    {\thesection}
+    {1em}{}
+
+\titleformat{\subsection}
+    {\normalsize\bfseries}
+    {\thesubsection}
+    {1em}{}
+
+\titleformat{\subsubsection}
+    {\normalsize\bfseries}
+    {\thesubsubsection}
+    {1em}{}
+
+\titlespacing*{\chapter}{0pt}{30pt}{8pt}
+\titlespacing*{\section}{\parindent}{*4}{*4}
+\titlespacing*{\subsection}{\parindent}{*4}{*4}
+\titlespacing*{\subsubsection}{\parindent}{*4}{*4}
+
+\RequirePackage{geometry}
+\geometry{left=2cm}
+\geometry{right=1.5cm}
+\geometry{top=1cm}
+\geometry{bottom=2cm}
+\parindent=1cm
+
+\makeatletter
+\renewcommand\chapter{\par
+\thispagestyle{plain}
+\@afterindentfalse \secdef\@chapter\@schapter}
+\makeatother
+
+\newcommand{\codepart}[1]
+{{\ttfamily \textbf{#1}}}
+
+\RequirePackage{xhfill}
+\RequirePackage{array}
+\RequirePackage{fancyhdr}
+
+% define Prolog color scheme
+\lstdefinestyle{customProlog}{
+  belowcaptionskip=1\baselineskip,
+  breaklines=true,
+  frame=L,
+  xleftmargin=\parindent,
+  language=Prolog,
+  showstringspaces=false,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{green!40!black},
+  commentstyle=\itshape\color{purple!40!black},
+  identifierstyle=\color{blue},
+  stringstyle=\color{orange},
+}
+
+\endinput
