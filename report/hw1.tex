@@ -1,0 +1,123 @@
+\documentclass[a4paper,12pt]{extreport}
+\usepackage{preamble}
+
+\begin{document}
+  \begin{center}
+    \textbf{Дальневосточный федеральный университет}\par
+    Школа естественных наук\par
+    Домашнаяя работа по предмету <<Логическое программирование>>\par
+    (8-й семестр, прикладная математика и информатика)\par
+    \textbf{группа № Б8403А, Федоров Константин Сергеевич}\par
+    \textit{28.02.2018}
+  \end{center}
+
+  \chapter{Реализовать метод $fib(N, F)$, где $F$ - это $N^{\text{\underline{e}}}$
+  число Фибоначчи.}\par
+  \begin{lstlisting}[caption=fib(N{,} F) realization, style=customProlog]
+fib(0, 0).
+fib(1, 1).
+fib(N, F) :-
+  N > 0,
+  N1 is N - 1,
+  N2 is N - 2,
+  fib(N1, F1),
+  fib(N2, F2),
+  F is F1 + F2.
+  \end{lstlisting}
+  \section{Синтетические тесты:}\par
+  \begin{lstlisting}[caption=fib(N{,} F) realization, style=customProlog]
+test1 :-
+  fib(0, 0). % true
+test2 :-
+  fib(1, 1). % true
+test3 :-
+  fib(2, 1). % true
+test4 :-
+  fib(3, 2). % true
+test5 :-
+  fib(4, 3). % true
+test6 :-
+  fib(5, 5). % true
+test7 :-
+  fib(6, 8). % true
+test8 :-
+  fib(7, 13). % true
+  \end{lstlisting}
+  \chapter{Реализовать функцию $gcd(X, Y, Z)$, где $Z$ - это НОД$(X, Y)$.}\par
+  \begin{lstlisting}[caption=gcd(X{,} Y{,} Z) realization, style=customProlog]
+gcd(0, X, X) :- X > 0.
+gcd(X, 0, X) :- X > 0.
+gcd(X, X, X) :- X > 0.
+gcd(M, N, X) :-
+  M < N,
+  Q is N - M,
+  gcd(M, Q, X).
+gcd(M, N, X) :-
+  M > N,
+  gcd(N, M, X).
+  \end{lstlisting}
+  \section{Синтетические тесты:}\par
+  \begin{lstlisting}[caption=gcd(X{,} Y{,} Z) F) tests, style=customProlog]
+test1 :-
+  not(gcd(0, 0, 0)). % true
+test2 :-
+  gcd(0, 1, 1). % true
+test3 :-
+  gcd(1, 0, 1). % true
+test4 :-
+  gcd(1, 0, 1). % true
+test5 :-
+  gcd(5, 10, 5). % true
+test6 :-
+  gcd(4, 456, 4). % true
+test7 :-
+  gcd(256, 856, 8). % true
+  \end{lstlisting}
+  \chapter{Реализовать функцию $merge\_sort(L, SL)$, где $SL$ - это отсортированный список $L$.}\par
+  \begin{lstlisting}[caption=merge\_sort(L{,} SL) realization, style=customProlog]
+mergesort([], []).
+mergesort([H], [H]).
+mergesort(L, SL) :-
+  length(L, N),
+  M is N // 2,
+  left_sublist(L, M, H),
+  right_sublist(L, M, T),
+  mergesort(H, L1),
+  mergesort(T, L2),
+  merge(L1, L2, SL).
+% getter of the left sublist [helper]
+left_sublist(_, 0, []).
+left_sublist([H|T1], N, [H|T2]) :-
+  N1 is N - 1,
+  left_sublist(T1, N1, T2).
+% getter of the right sublist [helper]
+right_sublist(T, 0, T).
+right_sublist([_|T], N, L) :-
+  N1 is N - 1,
+  right_sublist(T, N1, L).
+% merge of two sublist to one with sort [helper]
+merge(L, [], L).
+merge([], L, L).
+merge([H1|T1], [H|T2], [H|T]) :-
+  H < H1,
+  merge([H1|T1], T2, T).
+merge([H|T1], [H1|T2], [H|T]) :-
+  H =< H1,
+  merge(T1, [H1|T2], T).
+  \end{lstlisting}
+  \section{Синтетические тесты:}\par
+  \begin{lstlisting}[caption=merge\_sort(L{,} SL) tests, style=customProlog]
+test1 :-
+  mergesort([], []). % true
+test2 :-
+  mergesort([1], [1]). % true
+test3 :-
+  mergesort([1, 2], [1, 2]). % true
+test4 :-
+  mergesort([3, 1, 2], [1, 2, 3]). % true
+test5 :-
+  mergesort([3, 4, 3], [3, 3, 4]). % true
+test6 :-
+  mergesort([2, 1, 10, 5, 3, 7, 6, 4, 8, 9], [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]). % true
+  \end{lstlisting}
+\end{document}
