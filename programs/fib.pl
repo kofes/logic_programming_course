@@ -1,31 +1,36 @@
 #!/usr/bin/swipl
 % Fibonacci function's realization
 fib(0, 0).
-fib(1, 1).
-fib(N, F) :-
-  N > 0,
-  N1 is N - 1,
-  N2 is N - 2,
-  fib(N1, F1),
-  fib(N2, F2),
-  F is F1 + F2.
+fib(s(0), s(0)).
+fib(s(s(N)), F) :-
+  fib(s(N), F1),
+  fib(N, F2),
+  plus(F1, F2, F).
+% plus helper
+plus(0, X, X) :- n_n(X).
+plus(X, 0, X) :- n_n(X).
+plus(s(X), Y, s(Z)) :-
+  plus(X, Y, Z).
+% n_n helper
+n_n(0).
+n_n(s(N)) :- n_n(N).
 % fib's tests
 test1 :-
   fib(0, 0).
 test2 :-
-  fib(1, 1).
+  fib(s(0), s(0)).
 test3 :-
-  fib(2, 1).
+  fib(s(s(0)), s(0)).
 test4 :-
-  fib(3, 2).
+  fib(s(s(s(0))), s(s(0))).
 test5 :-
-  fib(4, 3).
+  fib(s(s(s(s(0)))), s(s(s(0)))).
 test6 :-
-  fib(5, 5).
+  fib(s(s(s(s(s(0))))), s(s(s(s(s(0)))))).
 test7 :-
-  fib(6, 8).
+  fib(s(s(s(s(s(s(0)))))), s(s(s(s(s(s(s(s(0))))))))).
 test8 :-
-  fib(7, 13).
+  fib(s(s(s(s(s(s(s(0))))))), s(s(s(s(s(s(s(s(s(s(s(s(s(0)))))))))))))).
 
 :- initialization(main, main).
 
