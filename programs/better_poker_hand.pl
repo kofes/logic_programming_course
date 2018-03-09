@@ -2,11 +2,8 @@
 % better poker hand function's realization
 better_poker_hand(H1, H2, H) :-
   mergesort(H1, SH1),
-  writeln(SH1), !,
-  mergesort(H2, SH2),
-  writeln(SH2), !,
-  betterhand(SH1, SH2, H),
-  writeln(H).
+  mergesort(H2, SH2), !,
+  betterhand(SH1, SH2, H).
 % Треф - t, Пики - p, Буби - b, Черви - h
 test1 :-
   better_poker_hand([
@@ -96,12 +93,121 @@ test5 :-
     card(queen, p),
     card(2, h)
   ]).
+test6 :-
+  better_poker_hand([
+    card(queen, h),
+    card(queen, t),
+    card(4, h),
+    card(7, p),
+    card(2, h)
+  ],[
+    card(king, p),
+    card(king, b),
+    card(9, t),
+    card(8, t),
+    card(7, t)
+  ], [
+    card(king, p),
+    card(king, b),
+    card(9, t),
+    card(8, t),
+    card(7, t)
+  ]).
+test7 :-
+  better_poker_hand([
+    card(king, h),
+    card(king, t),
+    card(10, h),
+    card(7, p),
+    card(2, h)
+  ],[
+    card(king, p),
+    card(king, b),
+    card(9, t),
+    card(8, t),
+    card(7, t)
+  ], [
+    card(king, h),
+    card(king, t),
+    card(10, h),
+    card(7, p),
+    card(2, h)
+  ]).
+
+test8 :-
+  better_poker_hand([
+    card(king, h),
+    card(king, t),
+    card(10, h),
+    card(7, p),
+    card(2, h)
+  ],[
+    card(king, p),
+    card(king, b),
+    card(10, t),
+    card(8, t),
+    card(7, t)
+  ], [
+    card(king, p),
+    card(king, b),
+    card(10, t),
+    card(8, t),
+    card(7, t)
+  ]).
+
+test9 :-
+  has_three_of_a_kind([
+    card(ace, p),
+    card(queen, b),
+    card(queen, t),
+    card(queen, h),
+    card(7, t)
+  ], 2).
+test10 :-
+  better_poker_hand([
+    card(king, h),
+    card(king, t),
+    card(king, b),
+    card(7, p),
+    card(2, h)
+  ],[
+    card(ace, p),
+    card(queen, b),
+    card(queen, t),
+    card(queen, h),
+    card(7, t)
+  ],[
+    card(king, _),
+    card(king, _),
+    card(king, _),
+    card(7, _),
+    card(2, _)
+  ]).
+test11 :-
+  better_poker_hand([
+    card(king, h),
+    card(king, t),
+    card(queen, b),
+    card(7, p),
+    card(2, h)
+  ],[
+    card(ace, p),
+    card(queen, b),
+    card(queen, t),
+    card(queen, h),
+    card(7, t)
+  ],[
+    card(ace, p),
+    card(queen, _),
+    card(queen, _),
+    card(queen, _),
+    card(7, t)
+  ]).
+
 
 betterhand(H1, H2, H1) :-
   bettercombination(H1, C1),
-  writeln(C1), !,
   bettercombination(H2, C2),
-  writeln(C2), !,
   isbetter(C1, C2).
 
 betterhand(H1, H2, H2) :-
@@ -129,19 +235,19 @@ betterhand(H1, H2, []) :-
 bettercards(H1, H2, straight_flush) :-
   getcardfromhand(H1, 1, C1),
   getcardfromhand(H2, 1, C2),
-  successor(C1, C2).
+  isbettercard(C1, C2).
 
 bettercards(H1, H2, four_of_a_kind) :-
   has_four_of_a_kind(H1, N1),
   has_four_of_a_kind(H2, N2),
   getcardfromhand(H1, N1, C1),
   getcardfromhand(H2, N2, C2),
-  successor(C1, C2).
+  isbettercard(C1, C2).
 
 bettercards(H1, H2, full_house) :-
   getcardfromhand(H1, 3, C13),
   getcardfromhand(H2, 3, C23),
-  successor(C13, C23).
+  isbettercard(C13, C23).
 bettercards(H1, H2, full_house) :-
   getcardfromhand(H1, 3, C13),
   getcardfromhand(H2, 3, C23),
@@ -150,19 +256,19 @@ bettercards(H1, H2, full_house) :-
   has_full_house(H2, N2),
   getcardfromhand(H1, N1, C12),
   getcardfromhand(H2, N2, C22),
-  successor(C12, C22).
+  isbettercard(C12, C22).
 
 bettercards(H1, H2, flush) :-
   getcardfromhand(H1, 1, C1),
   getcardfromhand(H2, 1, C2),
-  successor(C1, C2).
+  isbetter(C1, C2).
 bettercards(H1, H2, flush) :-
   getcardfromhand(H1, 1, C11),
   getcardfromhand(H2, 1, C21),
   isequalcards(C11, C21),
   getcardfromhand(H1, 2, C12),
   getcardfromhand(H2, 2, C22),
-  successor(C12, C22).
+  isbettercard(C12, C22).
 bettercards(H1, H2, flush) :-
   getcardfromhand(H1, 1, C11),
   getcardfromhand(H2, 1, C21),
@@ -172,7 +278,7 @@ bettercards(H1, H2, flush) :-
   isequalcards(C12, C22),
   getcardfromhand(H1, 3, C13),
   getcardfromhand(H2, 3, C23),
-  successor(C13, C23).
+  isbettercard(C13, C23).
 bettercards(H1, H2, flush) :-
   getcardfromhand(H1, 1, C11),
   getcardfromhand(H2, 1, C21),
@@ -185,7 +291,7 @@ bettercards(H1, H2, flush) :-
   isequalcards(C13, C23),
   getcardfromhand(H1, 4, C14),
   getcardfromhand(H2, 4, C24),
-  successor(C14, C24).
+  isbettercard(C14, C24).
 bettercards(H1, H2, flush) :-
   getcardfromhand(H1, 1, C11),
   getcardfromhand(H2, 1, C21),
@@ -201,24 +307,24 @@ bettercards(H1, H2, flush) :-
   isequalcards(C14, C24),
   getcardfromhand(H1, 5, C15),
   getcardfromhand(H2, 5, C25),
-  successor(C15, C25).
+  isbettercard(C15, C25).
 
 bettercards(H1, H2, straight) :-
   getcardfromhand(H1, 1, C1),
   getcardfromhand(H2, 1, C2),
-  successor(C1, C2).
+  isbettercard(C1, C2).
 
 bettercards(H1, H2, three_of_a_kind) :-
   getcardfromhand(H1, 3, C1),
   getcardfromhand(H2, 3, C2),
-  successor(C1, C2).
+  isbettercard(C1, C2).
 
 bettercards(H1, H2, two_pair) :-
   has_two_pair(H1, N11, _, _),
   has_two_pair(H2, N21, _, _),
   getcardfromhand(H1, N11, C11),
   getcardfromhand(H2, N21, C21),
-  successor(C11, C21).
+  isbettercard(C11, C21).
 bettercards(H1, H2, two_pair) :-
   has_two_pair(H1, N11, N12, _),
   has_two_pair(H2, N21, N22, _),
@@ -227,7 +333,7 @@ bettercards(H1, H2, two_pair) :-
   isequalcards(C11, C21),
   getcardfromhand(H1, N12, C12),
   getcardfromhand(H2, N22, C22),
-  successor(C12, C22).
+  isbettercard(C12, C22).
 bettercards(H1, H2, two_pair) :-
   has_two_pair(H1, N11, N12, N13),
   has_two_pair(H2, N21, N22, N23),
@@ -239,14 +345,14 @@ bettercards(H1, H2, two_pair) :-
   isequalcards(C12, C22),
   getcardfromhand(H1, N13, C13),
   getcardfromhand(H2, N23, C23),
-  successor(C13, C23).
+  isbettercard(C13, C23).
 
 bettercards(H1, H2, one_pair) :-
-  has_one_pair(H1, N1),
-  has_one_pair(H2, N2),
-  getcardfromhand(H1, N1, C1),
-  getcardfromhand(H2, N2, C2),
-  successor(C1, C2).
+  has_one_pair(H1, NV1),
+  has_one_pair(H2, NV2),
+  getcardfromhand(H1, NV1, CV1),
+  getcardfromhand(H2, NV2, CV2),
+  isbettercard(CV1, CV2).
 bettercards(H1, H2, one_pair) :-
   has_one_pair(H1, NV1),
   has_one_pair(H2, NV2),
@@ -255,7 +361,7 @@ bettercards(H1, H2, one_pair) :-
   isequalcards(CV1, CV2),
   getcardfromhand(H1, 1, C11),
   getcardfromhand(H2, 1, C21),
-  successor(C11, C21).
+  isbettercard(C11, C21).
 bettercards(H1, H2, one_pair) :-
   has_one_pair(H1, NV1),
   has_one_pair(H2, NV2),
@@ -267,7 +373,7 @@ bettercards(H1, H2, one_pair) :-
   isequalcards(C11, C21),
   getcardfromhand(H1, 2, C12),
   getcardfromhand(H2, 2, C22),
-  successor(C12, C22).
+  isbettercard(C12, C22).
 bettercards(H1, H2, one_pair) :-
   has_one_pair(H1, NV1),
   has_one_pair(H2, NV2),
@@ -282,7 +388,7 @@ bettercards(H1, H2, one_pair) :-
   isequalcards(C12, C22),
   getcardfromhand(H1, 3, C13),
   getcardfromhand(H2, 3, C23),
-  successor(C13, C23).
+  isbettercard(C13, C23).
 bettercards(H1, H2, one_pair) :-
   has_one_pair(H1, NV1),
   has_one_pair(H2, NV2),
@@ -300,7 +406,7 @@ bettercards(H1, H2, one_pair) :-
   isequalcards(C13, C23),
   getcardfromhand(H1, 4, C14),
   getcardfromhand(H2, 4, C24),
-  successor(C14, C24).
+  isbettercard(C14, C24).
 bettercards(H1, H2, one_pair) :-
   has_one_pair(H1, NV1),
   has_one_pair(H2, NV2),
@@ -321,19 +427,19 @@ bettercards(H1, H2, one_pair) :-
   isequalcards(C14, C24),
   getcardfromhand(H1, 5, C15),
   getcardfromhand(H2, 5, C25),
-  successor(C15, C25).
+  isbettercard(C15, C25).
 
 bettercards(H1, H2, high_card) :-
   getcardfromhand(H1, 1, C11),
   getcardfromhand(H2, 1, C21),
-  successor(C11, C21).
+  isbettercard(C11, C21).
 bettercards(H1, H2, high_card) :-
   getcardfromhand(H1, 1, C11),
   getcardfromhand(H2, 1, C21),
   isequalcards(C11, C21),
   getcardfromhand(H1, 2, C12),
   getcardfromhand(H2, 2, C22),
-  successor(C12, C22).
+  isbettercard(C12, C22).
 bettercards(H1, H2, high_card) :-
   getcardfromhand(H1, 1, C11),
   getcardfromhand(H2, 1, C21),
@@ -343,7 +449,7 @@ bettercards(H1, H2, high_card) :-
   isequalcards(C12, C22),
   getcardfromhand(H1, 3, C13),
   getcardfromhand(H2, 3, C23),
-  successor(C13, C23).
+  isbettercard(C13, C23).
 bettercards(H1, H2, high_card) :-
   getcardfromhand(H1, 1, C11),
   getcardfromhand(H2, 1, C21),
@@ -356,7 +462,7 @@ bettercards(H1, H2, high_card) :-
   isequalcards(C13, C23),
   getcardfromhand(H1, 4, C14),
   getcardfromhand(H2, 4, C24),
-  successor(C14, C24).
+  isbettercard(C14, C24).
 bettercards(H1, H2, high_card) :-
   getcardfromhand(H1, 1, C11),
   getcardfromhand(H2, 1, C21),
@@ -372,82 +478,37 @@ bettercards(H1, H2, high_card) :-
   successor(C14, C24),
   getcardfromhand(H1, 5, C15),
   getcardfromhand(H2, 5, C25),
-  successor(C15, C25).
+  isbettercard(C15, C25).
 
 % bettercombination [helper]
 bettercombination(H, royal_flush) :-
   has_royal_flush(H).
 
 bettercombination(H, straight_flush) :-
-  not(bettercombination(H, royal_flush)),
   has_straight_flush(H).
 
 bettercombination(H, four_of_a_kind) :-
-  not(bettercombination(H, royal_flush)),
-  not(bettercombination(H, straight_flush)),
   has_four_of_a_kind(H, _).
 
 bettercombination(H, full_house) :-
-  not(bettercombination(H, royal_flush)),
-  not(bettercombination(H, straight_flush)),
-  not(bettercombination(H, four_of_a_kind)),
   has_full_house(H, _).
 
 bettercombination(H, flush) :-
-  not(bettercombination(H, royal_flush)),
-  not(bettercombination(H, straight_flush)),
-  not(bettercombination(H, four_of_a_kind)),
-  not(bettercombination(H, full_house)),
   has_flush(H).
 
 bettercombination(H, straight) :-
-  not(bettercombination(H, royal_flush)),
-  not(bettercombination(H, straight_flush)),
-  not(bettercombination(H, four_of_a_kind)),
-  not(bettercombination(H, full_house)),
-  not(bettercombination(H, flush)),
   has_straight(H).
 
 bettercombination(H, three_of_a_kind) :-
-  not(bettercombination(H, royal_flush)),
-  not(bettercombination(H, straight_flush)),
-  not(bettercombination(H, four_of_a_kind)),
-  not(bettercombination(H, full_house)),
-  not(bettercombination(H, flush)),
-  not(bettercombination(H, straight)),
   has_three_of_a_kind(H, _).
 
 bettercombination(H, two_pair) :-
-  not(bettercombination(H, royal_flush)),
-  not(bettercombination(H, straight_flush)),
-  not(bettercombination(H, four_of_a_kind)),
-  not(bettercombination(H, full_house)),
-  not(bettercombination(H, flush)),
-  not(bettercombination(H, straight)),
-  not(bettercombination(H, three_of_a_kind)),
   has_two_pair(H, _, _, _).
 
 bettercombination(H, one_pair) :-
-  not(bettercombination(H, royal_flush)),
-  not(bettercombination(H, straight_flush)),
-  not(bettercombination(H, four_of_a_kind)),
-  not(bettercombination(H, full_house)),
-  not(bettercombination(H, flush)),
-  not(bettercombination(H, straight)),
-  not(bettercombination(H, three_of_a_kind)),
-  not(bettercombination(H, two_pair)),
   has_one_pair(H, _).
 
-bettercombination(H, high_card) :-
-  not(bettercombination(H, royal_flush)),
-  not(bettercombination(H, straight_flush)),
-  not(bettercombination(H, four_of_a_kind)),
-  not(bettercombination(H, full_house)),
-  not(bettercombination(H, flush)),
-  not(bettercombination(H, straight)),
-  not(bettercombination(H, three_of_a_kind)),
-  not(bettercombination(H, two_pair)),
-  not(bettercombination(H, one_pair)).
+bettercombination(H, high_card).
 
 % has_%combination% [helpers]
 % no number
@@ -614,6 +675,9 @@ getcardfromhand([H|T], N, C) :-
 iscard(card(_, _)).
 
 % is first combination/card better then second
+isbettercard(card(V1, _), card(V2, _)) :-
+  isbetter(V1, V2).
+
 isbetter(C1, C2) :-
   successor(C1, C2).
 
@@ -621,7 +685,7 @@ isbetter(C1, C2) :-
   successor(C1, C),
   isbetter(C, C2).
 
-isequalcards(C, C):- iscard(C).
+isequalcards(card(V, _), card(V, _)).
 
 successor(royal_flush, straight_flush).
 successor(straight_flush, four_of_a_kind).
