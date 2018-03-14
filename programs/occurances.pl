@@ -27,3 +27,15 @@ subterm_list(ST, [Arg|_]) :-
 
 subterm_list(ST, [_|Args]) :-
   subterm_list(ST, Args).
+
+test1 :-
+  occurances(x, x, 1).
+
+test2 :-
+  occurances(x, f(x), 1).
+
+test3 :-
+  occurances(x, f(x, x), 2).
+
+test4 :-
+  occurances(x, f(x, x + x), 3).

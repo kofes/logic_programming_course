@@ -2,7 +2,6 @@
 % diff function's realization
 diff(U, X, R) :-
   dfdx(U, X, A),
-  writeln(A), !,
   simplify(A, R).
 
 dfdx(X, X, 1) :-
@@ -160,6 +159,14 @@ simplifyOperation(*, X, X^N, X^K) :-
   K is N+1.
 simplifyOperation(*, X^N, X, X^K) :-
   K is N+1.
+simplifyOperation(*, C1, C2*X, C*X) :-
+  number(C1),
+  number(C2),
+  C is C1 * C2.
+simplifyOperation(*, C1, C2*X^N, C*X^N) :-
+  number(C1),
+  number(C2),
+  C is C1 * C2.
 % TODO: add many conditions
 simplifyOperation(*, X, Y, X*Y).
 
@@ -176,3 +183,22 @@ simplifyOperation(^, _, 0, 1).
 simplifyOperation(^, X, 1, X).
 % TODO: add many conditions
 simplifyOperation(^, X, Y, X^Y).
+
+
+test1 :-
+  diff(1, x, 0).
+
+test2 :-
+  diff(x, x, 1).
+
+test3 :-
+  diff(x^2, x, 2*x).
+
+test4 :-
+  diff(2*x, x, 2).
+
+test5 :-
+  diff(2*x^3, x, 6*x^2).
+
+test6 :-
+  diff(10 + 4*x + 2*x^3, x, 4+6*x^2).
