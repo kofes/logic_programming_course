@@ -271,3 +271,7 @@ test12 :-
 
 test13 :-
   dfdg_dgdx(sin(x), x, cos(y), y, -((cos(cos(y)))*sin(y))).
+
+test14 :-
+  dfdg_dgdx(sin(x), x, cos(y), y, Res),
+  Res = -((cos(cos(y)))*sin(y)).

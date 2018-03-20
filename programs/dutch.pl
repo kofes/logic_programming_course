@@ -43,3 +43,7 @@ test9 :-
 
 test10 :-
   dutch([red(10), white(5)], [red(10), white(5)]).
+
+test11 :-
+  dutch([red(10), white(5)], Res),
+  Res = [red(10), white(5)].

@@ -1,5 +1,12 @@
 #!/usr/bin/swipl
 
+% Возможные варианты вызова:
+% |ST| T| Position|
+% |- |+ |-        | -> генерирует все возможные варианты ST и Position
+% |+ |+ |-        | -> Выводит первую позицию ST в терме T
+% |- |+ |+        | -> Выводит ST, находящийся в позиции Position в терме T
+% |+ |+ |+        | -> Проверяет на выводимость функцию, при заданных параметрах ST, T, Position
+
 position(T, T, []).
 
 position(ST, T, Position) :-
@@ -35,3 +42,16 @@ test6 :-
 
 test7 :-
   position(x, f(z, y, y(g(a, x))), [3, 1, 2]).
+
+test8 :-
+  position(ST, f(z, y, y(g(a, x))), [3, 1, 2]),
+  ST = x.
+
+test9 :-
+  position(x, f(z, y, y(g(a, x))), Pos),
+  Pos = [3, 1, 2].
+
+test10 :-
+  position(ST, f(z, y, y(g(a, x))), Pos),
+  ST = x,
+  Pos = [3, 1, 2].

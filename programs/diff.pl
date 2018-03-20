@@ -202,3 +202,7 @@ test5 :-
 
 test6 :-
   diff(10 + 4*x + 2*x^3, x, 4+6*x^2).
+
+test7 :-
+  diff(10 + 4*x + 2*x^3, x, Res),
+  Res = 4+6*x^2.
