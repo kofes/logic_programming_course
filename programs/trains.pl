@@ -1,5 +1,16 @@
 #!/usr/bin/swipl
 
+% findPath(A, B, Path)
+% A | B | Path |
+% + | + |  +   |
+% - | + |  +   |
+% + | - |  +   |
+% + | + |  -   |
+% - | - |  +   |
+% - | + |  -   |
+% + | - |  -   |
+% - | - |  -   |
+
 :- use_module(library(clpfd)).
 :- use_module(library(apply)).
 
