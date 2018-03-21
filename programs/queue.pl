@@ -3,16 +3,16 @@
 queue(S) :-
   queue(S, Q-Q).
 
-queue([enqueue(X)|Xs], Qh-Qt) :-
-  enqueue(X, Qh-Qt, Q1h-Q1t),
+queue([enqueue(X)|Xs], Q) :-
+  enqueue(X, Q, Q1h-Q1t),
   determine(Q1h, L),
-  writeln([enqueue(X), acted |L]),
+  write("enqueue("), write(X), write(") acted to queue, result: "), writeln(L),
   queue(Xs, Q1h-Q1t).
 
-queue([dequeue(X)|Xs], Qh-Qt) :-
-  dequeue(X, Qh-Qt, Q1h-Q1t),
+queue([dequeue(X)|Xs], Q) :-
+  dequeue(X, Q, Q1h-Q1t),
   determine(Q1h, L),
-  writeln([dequeue(X), acted |L]),
+  write("dequeue("), write(X), write(") acted to queue, result: "), writeln(L),
   queue(Xs, Q1h-Q1t).
 
 queue([], _).
@@ -27,4 +27,4 @@ determine([H|T], [H|T1]) :-
 
 test :-
   queue([enqueue(1), enqueue(2), enqueue(3), dequeue(X), dequeue(Y)]),
-  X = 1, Y = 2.
+  !, X = 1, Y = 2.
