@@ -1,7 +1,5 @@
 #!/usr/bin/swipl
 
-% :- use_module(library(clpfd)).
-
 queue(S) :-
   queue(S, Q-Q).
 
