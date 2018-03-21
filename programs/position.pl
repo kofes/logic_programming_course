@@ -52,6 +52,28 @@ test9 :-
   Pos = [3, 1, 2].
 
 test10 :-
-  position(ST, f(z, y, y(g(a, x))), Pos),
-  ST = x,
-  Pos = [3, 1, 2].
+  position(ST,
+    f( %[]
+      z( %[1]
+        x,  %[1, 1]
+        k( %[1, 2]
+          u, %[1, 2, 1]
+          v %[1, 2, 2]
+        )
+      ),
+      g( %[2]
+        y %[2, 1]
+      ),
+      z %[3]
+    ), Pos),
+  (
+    ST = f(z(x, k(u, v)), g(y), z), Pos = [];
+    ST = z(x, k(u, v)), Pos = [1];
+    ST = x, Pos = [1, 1];
+    ST = k(u, v), Pos = [1, 2];
+    ST = u, Pos = [1, 2, 1];
+    ST = v, Pos = [1, 2, 2];
+    ST = g(y), Pos = [2];
+    ST = y, Pos = [2, 1];
+    ST = z, Pos = [3]
+  ).
