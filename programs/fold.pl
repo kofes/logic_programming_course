@@ -24,18 +24,18 @@ reduce((Head:- Body), (PHead:- PBody)):-
   reduce(Body, PBody).
 
 reduce(true, true) :- !.
-reduce((Head, Body), Res):-
+reduce((A, B), Res):-
   !,
-  reduce(Head, PHead),
-  reduce(Body, PBody),
-  merge(PHead, PBody, Res).
-reduce(Head, Body):-
-  fold(Head, Body), !.
-reduce(Head, Res):-
-  unfold(Head), !,
-  clause(Head, Body),
-  reduce(Body, Res).
-reduce(Head, Head).
+  reduce(A, PA),
+  reduce(B, PB),
+  merge(PA, PB, Res).
+reduce(A, B):-
+  fold(A, B), !.
+reduce(A, Res):-
+  unfold(A), !,
+  clause(A, B),
+  reduce(B, Res).
+reduce(A, A).
 
 unfold(initial(_)).
 unfold(final(_)).
