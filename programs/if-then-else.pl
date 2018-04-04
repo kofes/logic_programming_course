@@ -1,19 +1,19 @@
 if_then_else(C, T, A) --> block(_),
   "if ", block(C1), {\+ phrase(if, C1) },
-  keyword("then"), block(T1), {\+ phrase(then, T1) },
-  keyword("else"), block(A1), {\+ phrase(else, A1) }, ";",
+  align("then"), block(T1), {\+ phrase(then, T1) },
+  align("else"), block(A1), {\+ phrase(else, A1) }, ";",
   block(_),
   {atom_codes(C, C1), atom_codes(T, T1), atom_codes(A, A1)}.
 
 block([]) --> [].
 block([L|T]) --> [L], block(T).
 
-keyword(KW) --> " ", KW, " ".
-keyword(KW) --> "\n", KW, " ".
+align(W) --> " ", W, " ".
+align(W) --> "\n", W, " ".
 
-if --> block(_), keyword("if"), block(_).
-then --> block(_), keyword("then"), block(_).
-else --> block(_), keyword("else"), block(_).
+if --> block(_), align("if"), block(_).
+then --> block(_), align("then"), block(_).
+else --> block(_), align("else"), block(_).
 
 test0:-
   phrase_from_file(if_then_else(C, T, A), 'test0.in'),
@@ -23,7 +23,7 @@ test0:-
   !.
 
 test1:-
-  \+ phrase_from_file(if_then_else(_, _, _), 'test1.in').
+  not(phrase_from_file(if_then_else(_, _, _), 'test1.in')).
 
 test2:-
   phrase_from_file(if_then_else(C, T, A), 'test2.in'),
